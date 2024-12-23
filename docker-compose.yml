@@ -1,0 +1,10 @@
+services:
+  database:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: finance
+    ports:
+      - "5433:5432"
+    restart: always

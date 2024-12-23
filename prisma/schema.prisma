@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int           @id @default(autoincrement())
+  email        String        @unique
+  name         String?
+  password     String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  deletedAt    DateTime?
+  transactions Transaction[]
+  auditLogs    AuditLog[]
+}
+
+model Transaction {
+  id          Int             @id @default(autoincrement())
+  date        DateTime
+  amount      Float
+  description String?
+  type        TransactionType
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  deletedAt   DateTime?
+  userId      Int?
+  categoryId  Int?
+
+  category Category? @relation(fields: [categoryId], references: [id])
+  user     User?     @relation(fields: [userId], references: [id])
+
+  @@index([date, type])
+  @@index([userId, date])
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  transactions Transaction[]
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
+  action    String
+  table     String
+  recordId  Int?
+  changes   Json?
+  timestamp DateTime @default(now())
+
+  @@index([userId, timestamp])
+}
+
+enum TransactionType {
+  income
+  expense
+}
