@@ -49,16 +49,18 @@ model Category {
 }
 
 model AuditLog {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  user      User     @relation(fields: [userId], references: [id])
-  action    String
-  table     String
-  recordId  Int?
-  changes   Json?
-  timestamp DateTime @default(now())
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  user          User     @relation(fields: [userId], references: [id])
+  action        String
+  table         String
+  recordId      Int?
+  changes       Json?
+  correlationId String?
+  path          String?
+  timestamp     DateTime @default(now())
 
-  @@index([userId, timestamp])
+  @@index([userId, recordId, table, timestamp])
 }
 
 enum TransactionType {

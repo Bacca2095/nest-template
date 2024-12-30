@@ -1,0 +1,39 @@
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
+import { ExceptionHandler } from './interfaces/exception-handler.interface';
+
+@Injectable()
+export class PrismaExceptionsHandler extends ExceptionHandler {
+  private readonly logger = new Logger(PrismaExceptionsHandler.name);
+
+  isType(error: unknown): error is PrismaClientKnownRequestError {
+    return error instanceof PrismaClientKnownRequestError;
+  }
+
+  execute(error: PrismaClientKnownRequestError): never {
+    this.logger.error({
+      type: 'PrismaError',
+      code: error.code,
+      message: error.meta['cause'],
+      model: error.meta['modelName'],
+      stackTrace: this.getStackTrace(error),
+    });
+
+    switch (error.code) {
+      case 'P2002':
+        throw new ConflictException(
+          `${error.meta['modelName']} already exists`,
+        );
+      case 'P2025':
+        throw new NotFoundException(`${error.meta['modelName']} not found`);
+      default:
+        throw new Error('Unexpected Prisma error');
+    }
+  }
+}

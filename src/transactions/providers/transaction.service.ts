@@ -1,33 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/shared/services/prisma.service';
+
+import { HandleExceptions } from '@/exceptions/decorators/handle-exceptions.decorator';
+import { AsyncLocalStorageService } from '@/shared/providers/async-local-storage.service';
+import { PrismaService } from '@/shared/providers/prisma.service';
+
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
 import { TransactionDto } from '../dto/transaction.dto';
 import { UpdateTransactionDto } from '../dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionService {
-  constructor(private readonly db: PrismaService) {}
+  constructor(
+    private readonly db: PrismaService,
+    private readonly als: AsyncLocalStorageService,
+  ) {}
 
-  async createTransaction(data: CreateTransactionDto): Promise<TransactionDto> {
-    return this.db.transaction.create({ data });
+  @HandleExceptions()
+  async create(data: CreateTransactionDto): Promise<TransactionDto> {
+    const userId = this.als.get<number>('userId');
+    return this.db.transaction.create({ data: { ...data, userId } });
   }
 
-  async getTransactions(): Promise<TransactionDto[]> {
-    return this.db.transaction.findMany();
+  @HandleExceptions()
+  async get(): Promise<TransactionDto[]> {
+    const userId = this.als.get<number>('userId');
+    return this.db.transaction.findMany({ where: { userId } });
   }
 
-  async getTransactionById(id: number): Promise<TransactionDto> {
-    return this.db.transaction.findUnique({ where: { id } });
+  @HandleExceptions()
+  async getById(id: number): Promise<TransactionDto> {
+    const userId = this.als.get<number>('userId');
+    return this.db.transaction.findUniqueOrThrow({ where: { id, userId } });
   }
 
-  async updateTransaction(
+  @HandleExceptions()
+  async update(
     id: number,
     data: UpdateTransactionDto,
   ): Promise<TransactionDto> {
-    return this.db.transaction.update({ where: { id }, data });
+    const userId = this.als.get<number>('userId');
+    return this.db.transaction.update({ where: { id, userId }, data });
   }
 
-  async deleteTransaction(id: number): Promise<TransactionDto> {
-    return this.db.transaction.delete({ where: { id } });
+  @HandleExceptions()
+  async delete(id: number): Promise<TransactionDto> {
+    const userId = this.als.get<number>('userId');
+    return this.db.transaction.delete({ where: { id, userId } });
   }
 }
