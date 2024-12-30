@@ -19,7 +19,7 @@ export class AuthService {
 
   @HandleExceptions()
   async signIn(email: string, password: string): Promise<TokenResponseDto> {
-    const user = await this.userService.findByEmail(email);
+    const user = await this.userService.getByEmail(email);
 
     const isPasswordValid = await verify(user.password, password);
 

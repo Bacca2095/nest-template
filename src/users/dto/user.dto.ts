@@ -2,7 +2,7 @@ import { ApiProperty, OmitType } from '@nestjs/swagger';
 import { User } from '@prisma/client';
 import { IsDate, IsEmail, IsNumber, IsString } from 'class-validator';
 
-export class UserDto implements User {
+export class UserWithPasswordDto implements User {
   @ApiProperty()
   @IsNumber()
   id: number;
@@ -32,4 +32,4 @@ export class UserDto implements User {
   deletedAt: Date;
 }
 
-export class UserWithoutPasswordDto extends OmitType(UserDto, ['password']) {}
+export class UserDto extends OmitType(UserWithPasswordDto, ['password']) {}

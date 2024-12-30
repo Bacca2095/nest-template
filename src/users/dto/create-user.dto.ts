@@ -1,8 +1,8 @@
 import { OmitType } from '@nestjs/swagger';
 
-import { UserDto } from './user.dto';
+import { UserWithPasswordDto } from './user.dto';
 
-export class CreateUserDto extends OmitType(UserDto, [
+export class CreateUserDto extends OmitType(UserWithPasswordDto, [
   'createdAt',
   'deletedAt',
   'updatedAt',

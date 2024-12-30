@@ -9,15 +9,17 @@ import { CreateUserDto } from '../dto/create-user.dto';
 export class UserService {
   constructor(private readonly db: PrismaService) {}
 
-  async findAll() {
+  async get() {
     return this.db.user.findMany();
   }
 
-  async findOne(id: number) {
-    return this.db.user.findUniqueOrThrow({ where: { id } });
+  async getById(id: number) {
+    return this.db.user.findUniqueOrThrow({
+      where: { id },
+    });
   }
 
-  async findByEmail(email: string) {
+  async getByEmail(email: string) {
     return this.db.user.findUniqueOrThrow({ where: { email } });
   }
 
