@@ -1,4 +1,5 @@
 export enum AppErrorCodesEnum {
+  HANDLE_EXCEPTIONS_NOT_INITIALIZE = '0000',
   USER_EXIST = '1000',
   INVALID_CREDENTIALS = '1001',
 }

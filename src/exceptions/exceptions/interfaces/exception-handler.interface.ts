@@ -1,5 +1,5 @@
 export abstract class ExceptionHandler {
-  abstract isType(error: unknown): boolean;
+  abstract isType(error: unknown): Record<string, unknown> | null;
   abstract execute(error: unknown): never;
 
   getStackTrace(error: Error): {

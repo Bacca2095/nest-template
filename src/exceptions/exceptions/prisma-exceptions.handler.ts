@@ -12,19 +12,25 @@ import { ExceptionHandler } from './interfaces/exception-handler.interface';
 export class PrismaExceptionsHandler extends ExceptionHandler {
   private readonly logger = new Logger(PrismaExceptionsHandler.name);
 
-  isType(error: unknown): error is PrismaClientKnownRequestError {
-    return error instanceof PrismaClientKnownRequestError;
+  isType(error: unknown): Record<string, unknown> | null {
+    if (error instanceof PrismaClientKnownRequestError) {
+      const errorData = {
+        type: 'prisma-error',
+        code: error.code,
+        message: error.meta['cause'],
+        model: error.meta['modelName'],
+        stackTrace: JSON.stringify(
+          this.getStackTrace(error as PrismaClientKnownRequestError),
+        ),
+      };
+
+      this.logger.error(errorData);
+      return errorData;
+    }
+    return null;
   }
 
   execute(error: PrismaClientKnownRequestError): never {
-    this.logger.error({
-      type: 'PrismaError',
-      code: error.code,
-      message: error.meta['cause'],
-      model: error.meta['modelName'],
-      stackTrace: this.getStackTrace(error),
-    });
-
     switch (error.code) {
       case 'P2002':
         throw new ConflictException(

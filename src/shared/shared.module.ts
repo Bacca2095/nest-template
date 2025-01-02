@@ -8,6 +8,7 @@ import { AuthModule } from 'src/auth/auth.module';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { CustomLoggerModule } from './modules/custom-logger.module';
 import { AsyncLocalStorageService } from './providers/async-local-storage.service';
+import { OpenSearchService } from './providers/opensearch.service';
 import { PrismaService } from './providers/prisma.service';
 
 @Global()
@@ -25,7 +26,8 @@ import { PrismaService } from './providers/prisma.service';
     },
     PrismaService,
     AsyncLocalStorageService,
+    OpenSearchService,
   ],
-  exports: [PrismaService, AsyncLocalStorageService],
+  exports: [PrismaService, AsyncLocalStorageService, OpenSearchService],
 })
 export class SharedModule {}

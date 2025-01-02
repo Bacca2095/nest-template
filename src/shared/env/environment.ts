@@ -8,6 +8,7 @@ interface EnvVariables {
   DATABASE_URL: string;
   JWT_SECRET: string;
   PORT: number;
+  OPENSEARCH_URL: string;
 }
 
 const envSchema: joi.ObjectSchema<EnvVariables> = joi
@@ -19,6 +20,7 @@ const envSchema: joi.ObjectSchema<EnvVariables> = joi
       .string()
       .valid('development', 'production', 'test')
       .default('development'),
+    OPENSEARCH_URL: joi.string().required(),
   })
   .unknown(true);
 
@@ -33,4 +35,5 @@ export const environment = {
   databaseUrl: envVars.DATABASE_URL,
   jwtSecret: envVars.JWT_SECRET,
   nodeEnv: envVars.NODE_ENV,
+  opensearchUrl: envVars.OPENSEARCH_URL,
 };

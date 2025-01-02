@@ -7,6 +7,10 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 
+import { OpenSearchService } from '@/shared/providers/opensearch.service';
+
+import { AppErrorCodesEnum } from '../enums/app-error-codes.enum';
+import { AppError } from '../errors/app.error';
 import { ExceptionHandler } from '../exceptions/interfaces/exception-handler.interface';
 
 @Injectable()
@@ -15,13 +19,14 @@ export class HandleExceptionsService implements OnModuleInit {
   private readonly logger = new Logger('HandleExceptions');
   private handlers: ExceptionHandler[];
 
-  constructor(private readonly moduleRef: ModuleRef) {}
+  constructor(
+    private readonly moduleRef: ModuleRef,
+    private readonly opensearch: OpenSearchService,
+  ) {}
 
   static getInstance(): HandleExceptionsService {
     if (!HandleExceptionsService.instance) {
-      throw new Error(
-        'HandleExceptionsService is not initialized. Ensure it is registered in a module.',
-      );
+      throw new AppError(AppErrorCodesEnum.HANDLE_EXCEPTIONS_NOT_INITIALIZE);
     }
     return HandleExceptionsService.instance;
   }
@@ -37,11 +42,13 @@ export class HandleExceptionsService implements OnModuleInit {
     );
   }
 
-  handleErrors(error: unknown): never {
+  async handleErrors(error: unknown): Promise<never> {
     this.logger.error(error);
 
     for (const handler of this.handlers) {
-      if (handler.isType(error)) {
+      const errorData = handler.isType(error);
+      if (errorData) {
+        await this.opensearch.logError(errorData['type'] as string, errorData);
         handler.execute(error);
       }
     }

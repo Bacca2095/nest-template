@@ -20,7 +20,7 @@ export function HandleExceptions(): MethodDecorator {
 
         return result;
       } catch (error) {
-        service.handleErrors(error);
+        await service.handleErrors(error);
       }
     };
 
