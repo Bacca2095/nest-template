@@ -7,8 +7,16 @@ import { SharedModule } from '@/shared/shared.module';
 import { TransactionModule } from '@/transactions/transaction.module';
 import { UserModule } from '@/users/user.module';
 
+import { ContaboModule } from './contabo/contabo.module';
+
 @Module({
-  imports: [SharedModule, UserModule, TransactionModule, MetricsModule],
+  imports: [
+    SharedModule,
+    UserModule,
+    TransactionModule,
+    MetricsModule,
+    ContaboModule,
+  ],
   controllers: [],
   providers: [],
 })

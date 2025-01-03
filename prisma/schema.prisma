@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["omitApi"]
 }
 
 datasource db {
@@ -61,6 +62,20 @@ model AuditLog {
   timestamp     DateTime @default(now())
 
   @@index([userId, recordId, table, timestamp])
+}
+
+model ServerCredential {
+  id        Int       @id @default(autoincrement())
+  name      String
+  password  String
+  host      String
+  serverId  Int       @unique
+  secretId  Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  @@index([serverId, secretId, name])
 }
 
 enum TransactionType {

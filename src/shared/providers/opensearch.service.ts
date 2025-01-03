@@ -14,7 +14,7 @@ export class OpenSearchService {
   }
 
   async createIndex(indexName: string): Promise<void> {
-    const response = await this.client.indices.create({
+    await this.client.indices.create({
       index: indexName,
       body: {
         settings: {
@@ -32,7 +32,6 @@ export class OpenSearchService {
         },
       },
     });
-    console.log(`Index created: ${response.body}`);
   }
 
   async existsIndex(indexName: string): Promise<boolean> {

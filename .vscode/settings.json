@@ -23,5 +23,6 @@
     "titleBar.inactiveBackground": "#d73e5f99",
     "titleBar.inactiveForeground": "#e7e7e799"
   },
-  "peacock.color": "#000"
+  "peacock.color": "#d73e5f",
+  "cSpell.words": ["contabo", "CONTABO"]
 }

@@ -10,12 +10,13 @@ export class UserService {
   constructor(private readonly db: PrismaService) {}
 
   async get() {
-    return this.db.user.findMany();
+    return this.db.user.findMany({ omit: { password: true } });
   }
 
   async getById(id: number) {
     return this.db.user.findUniqueOrThrow({
       where: { id },
+      omit: { password: true },
     });
   }
 
