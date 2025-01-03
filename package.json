@@ -46,7 +46,6 @@
     "nestjs-cls": "^4.5.0",
     "nestjs-pino": "^4.2.0",
     "node-ssh": "^13.2.0",
-    "osx-temperature-sensor": "^1.0.8",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pidusage": "^3.0.2",
