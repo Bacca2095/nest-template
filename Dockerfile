@@ -18,7 +18,7 @@ COPY ecosystem.config.js .
 COPY package.json .
 COPY yarn.lock .
 
-RUN yarn generate:schemas
+RUN yarn prisma:generate
 RUN yarn global add pm2
 
 CMD ["yarn", "run", "start:prod"]
