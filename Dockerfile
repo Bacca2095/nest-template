@@ -13,9 +13,9 @@ RUN yarn install
 FROM node:18-alpine
 
 WORKDIR /app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/prisma ./prisma
-ADD dist/apps/auth-app .
+COPY --from=builder /node_modules ./node_modules
+COPY --from=builder /prisma ./prisma
+ADD dist .
 COPY ecosystem.config.js .
 COPY package.json .
 COPY yarn.lock .
