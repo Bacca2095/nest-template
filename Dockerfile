@@ -3,7 +3,7 @@ FROM node:18 as builder
 
 COPY . .
 
-RUN yarn install
+RUN yarn install --network-timeout 1000000
 RUN yarn build
 
 
