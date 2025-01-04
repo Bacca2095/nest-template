@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 
 import { AppExceptionsHandler } from './exceptions/app-exceptions.handler';
+import { AxiosExceptionsHandler } from './exceptions/axios-exceptions.handler';
 import { PrismaExceptionsHandler } from './exceptions/prisma-exceptions.handler';
 import { HandleExceptionsService } from './providers/handle-exceptions.service';
 
@@ -8,14 +9,20 @@ import { HandleExceptionsService } from './providers/handle-exceptions.service';
   providers: [
     PrismaExceptionsHandler,
     AppExceptionsHandler,
+    AxiosExceptionsHandler,
     HandleExceptionsService,
     {
       provide: 'EXCEPTION_HANDLERS',
       useFactory: (
         prismaHandler: PrismaExceptionsHandler,
         appHandler: AppExceptionsHandler,
-      ) => [prismaHandler, appHandler],
-      inject: [PrismaExceptionsHandler, AppExceptionsHandler],
+        axiosHandler: AxiosExceptionsHandler,
+      ) => [prismaHandler, appHandler, axiosHandler],
+      inject: [
+        PrismaExceptionsHandler,
+        AppExceptionsHandler,
+        AxiosExceptionsHandler,
+      ],
     },
   ],
   exports: [HandleExceptionsService],
