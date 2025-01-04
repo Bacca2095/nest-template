@@ -21,6 +21,7 @@ export class MetricsService {
   private readonly BYTE_UNITS = ['B', 'KB', 'MB', 'GB', 'TB'];
   private readonly ROOT_VOLUME = '/System/Volumes/Data';
   private readonly TOP_PROCESS_COUNT = 3;
+  private readonly OS = process.platform;
 
   private formatBytes(bytes: number): string {
     let value = bytes;
@@ -68,7 +69,10 @@ export class MetricsService {
 
   async getDiskUsage(): Promise<DiskMetricsDto> {
     const fs = await si.fsSize();
-    const rootVolume = fs.find((disk) => disk.mount === this.ROOT_VOLUME);
+
+    const rootVolume = fs.find((disk) =>
+      this.OS !== 'darwin' ? disk.mount : disk.mount === this.ROOT_VOLUME,
+    );
 
     if (!rootVolume) {
       throw new Error('Root volume not found');
