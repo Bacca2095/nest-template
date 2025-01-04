@@ -1,4 +1,23 @@
 services:
+  app:
+    container_name: app
+    image: bacca2095/backend:latest
+    environment:
+      NODE_ENV: "development"
+      DATABASE_URL: "postgres://root:pass@db/finance?schema=public"
+      JWT_SECRET: "as"
+      PORT: 3001
+      OPENSEARCH_URL: "http://opensearch:9200"
+      CONTABO_CLIENT_ID: "INT-13560647"
+      CONTABO_CLIENT_SECRET: "d8mxvDaSZ0bhwvtvpF24MflDEVlh97ch"
+      CONTABO_API_USER: "bacca2095@gmail.com"
+      CONTABO_API_PASSWORD: "Hk1xMHR@e&116U"
+      CONTABO_AUTH_URL: "https://auth.contabo.com/auth/realms/contabo/protocol/openid-connect/token"
+      CONTABO_API_URL: "https://api.contabo.com/v1"
+      CONTABO_DEFAULT_SSH_ID: 127347
+    restart: always
+    networks:
+      - opensearch-net
   db:
     container_name: db
     image: postgres:latest
@@ -11,6 +30,8 @@ services:
     restart: always
     volumes:
       - db-data:/var/lib/postgresql/data
+    networks:
+      - opensearch-net
 
   localstack:
     container_name: localstack
@@ -24,6 +45,8 @@ services:
       - localstack-data:/var/lib/localstack
       - "/var/run/docker.sock:/var/run/docker.sock"
     restart: always
+    networks:
+      - opensearch-net
 
   opensearch:
     image: opensearchproject/opensearch:latest
