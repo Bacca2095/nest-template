@@ -16,6 +16,8 @@ services:
       CONTABO_API_URL: "https://api.contabo.com/v1"
       CONTABO_DEFAULT_SSH_ID: 127347
     restart: always
+    ports:
+      - "3001:3001"
     networks:
       - opensearch-net
   db:
