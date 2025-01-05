@@ -16,6 +16,7 @@ WORKDIR /app
 RUN apk add --no-cache libc6-compat
 COPY --chown=node:node --from=dev /app/node_modules ./node_modules
 COPY --chown=node:node . .
+RUN yarn prisma:generate
 RUN yarn build
 RUN yarn install --frozen-lockfile --production
 USER node
