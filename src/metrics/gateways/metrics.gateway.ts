@@ -45,6 +45,17 @@ export class MetricsGateway
     client.emit('metrics', metrics);
   }
 
+  notifySshCompletion(serverId: number, status: string, result?: any) {
+    this.server.emit('ssh-completion', { serverId, status, result });
+    this.logger.log(
+      `Notified clients about SSH completion for serverId: ${serverId}`,
+    );
+  }
+
+  notifyServerSync(status: string, data: any) {
+    this.server.emit('sync-status', { status, ...data });
+  }
+
   private startMetricsBroadcast() {
     if (this.intervalId) {
       clearInterval(this.intervalId);

@@ -3,35 +3,39 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { CreateServerDto } from '../dto/create-server.dto';
 import { ResetServerDto } from '../dto/reset-server.dto';
-import { ContaboService } from '../providers/contabo.service';
+import { ContaboImageService } from '../providers/contabo-image.service';
+import { ContaboInstanceService } from '../providers/contabo-instance.service';
 
 @ApiTags('Contabo')
 @Controller('contabo')
 export class ContaboController {
-  constructor(private readonly contaboService: ContaboService) {}
+  constructor(
+    private readonly serverService: ContaboInstanceService,
+    private readonly imageService: ContaboImageService,
+  ) {}
 
   @Post()
   async create(@Body() dto: CreateServerDto) {
-    return this.contaboService.createServer(dto);
+    return this.serverService.createServer(dto);
   }
 
   @Get()
   async getServerList() {
-    return this.contaboService.getServerList();
+    return this.serverService.getServerList();
   }
 
   @Get('images')
   async getImagesList() {
-    return this.contaboService.getImagesList();
+    return this.imageService.getImagesList();
   }
 
-  @Get('/:id')
-  async getServerDetails(@Param('id') id: number) {
-    return this.contaboService.connectSsh(id);
-  }
-
-  @Put('/:id')
+  @Put('/:id/reset')
   async resetServer(@Param('id') id: number, @Body() dto: ResetServerDto) {
-    return this.contaboService.resetServer(id, dto);
+    return this.serverService.resetServer(id, dto);
+  }
+
+  @Put('/instances/sync')
+  async syncServer() {
+    return this.serverService.syncServers();
   }
 }

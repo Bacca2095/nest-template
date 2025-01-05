@@ -90,6 +90,14 @@ services:
     networks:
       - opensearch-net
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - '6379:6379'
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+
 volumes:
   db-data:
   localstack-data:
