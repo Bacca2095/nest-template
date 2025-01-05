@@ -26,7 +26,7 @@ import { ContaboSecretService } from './providers/contabo-secret.service';
     }),
     BullBoardModule.forFeature({
       name: 'ssh',
-      adapter: BullAdapter, //or use BullAdapter if you're using bull instead of bullMQ
+      adapter: BullAdapter,
     }),
     MetricsModule,
   ],

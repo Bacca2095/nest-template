@@ -14,12 +14,12 @@ export class ContaboController {
     private readonly imageService: ContaboImageService,
   ) {}
 
-  @Post()
+  @Post('instances')
   async create(@Body() dto: CreateServerDto) {
     return this.serverService.createServer(dto);
   }
 
-  @Get()
+  @Get('instances')
   async getServerList() {
     return this.serverService.getServerList();
   }
@@ -29,12 +29,12 @@ export class ContaboController {
     return this.imageService.getImagesList();
   }
 
-  @Put('/:id/reset')
+  @Put('instances/:id/reset')
   async resetServer(@Param('id') id: number, @Body() dto: ResetServerDto) {
     return this.serverService.resetServer(id, dto);
   }
 
-  @Put('/instances/sync')
+  @Post('instances/sync')
   async syncServer() {
     return this.serverService.syncServers();
   }

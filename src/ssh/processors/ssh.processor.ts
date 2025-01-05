@@ -18,8 +18,6 @@ export class SshProcessor {
   async handleSshJob(job: Job<{ serverId: number }>): Promise<void> {
     const ssh = new NodeSSH();
 
-    console.log({ job });
-
     try {
       this.logger.log(`Processing job ${job.id}`);
       const serverCredential = await this.getServerCredential(
